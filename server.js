@@ -27,20 +27,16 @@ app.get('/', (req, res) => {
 // --- Database Sync & Server Initialization ---
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
-
 // Sync Sequelize models with the database
-// sequelize.sync({ alter: true }) // 'alter: true' safely updates tables to match models
-//   .then(() => {
-//     console.log('✅ Database synchronized successfully.');
+sequelize.sync({ alter: true }) // 'alter: true' safely updates tables to match models
+  .then(() => {
+    console.log('✅ Database synchronized successfully.');
     
-//     // Start the server only after the DB is synced
-//     app.listen(PORT, () => {
-//       console.log(`🚀 Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-//     });
-//   })
-//   .catch((err) => {
-//     console.error('❌ Unable to connect to the database:', err);
-//   });
+    // Start the server only after the DB is synced
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ Unable to connect to the database:', err);
+  });

@@ -27,4 +27,35 @@ const db = {};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// Import Models
+db.User = require('./User')(sequelize);
+db.Product = require('./Product')(sequelize);
+db.Order = require('./Order')(sequelize);
+db.OrderItem = require('./OrderItem')(sequelize);
+
+// --- Define Associations ---
+
+// 1. User <-> Order (One-to-Many)
+db.User.hasMany(db.Order, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+db.Order.belongsTo(db.User, { foreignKey: 'user_id' });
+
+// 2. Order <-> Product via OrderItem (Many-to-Many)
+db.Order.belongsToMany(db.Product, { 
+  through: db.OrderItem, 
+  foreignKey: 'order_id',
+  otherKey: 'product_id'
+});
+db.Product.belongsToMany(db.Order, { 
+  through: db.OrderItem, 
+  foreignKey: 'product_id',
+  otherKey: 'order_id'
+});
+
+// Direct associations for easy querying on the junction table itself
+db.Order.hasMany(db.OrderItem, { foreignKey: 'order_id', onDelete: 'CASCADE' });
+db.OrderItem.belongsTo(db.Order, { foreignKey: 'order_id' });
+
+db.Product.hasMany(db.OrderItem, { foreignKey: 'product_id' });
+db.OrderItem.belongsTo(db.Product, { foreignKey: 'product_id' });
+
 module.exports = db;
