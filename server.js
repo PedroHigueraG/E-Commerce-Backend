@@ -14,9 +14,9 @@ app.use(express.json());
 
 // --- Routes ---
 // We will create these route files next
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/products', require('./routes/productRoutes'));
-// app.use('/api/orders', require('./routes/orderRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
 // app.use('/webhooks/mercadopago', require('./routes/webhookRoutes'));
 
 // --- Basic Health Check Route ---
