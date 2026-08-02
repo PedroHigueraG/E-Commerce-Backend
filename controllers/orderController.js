@@ -19,16 +19,18 @@ const createCheckout = async (req, res) => {
       const product = await Product.findByPk(item.productId);
       if (!product) return res.status(404).json({ message: `Product ${item.productId} not found` });
 
-      totalAmount += parseFloat(product.price) * item.quantity;
+      // Convert the price to a strict integer to satisfy MercadoPago
+      const priceAsInteger = Math.round(Number(product.price));
+
+      totalAmount += priceAsInteger * item.quantity;
 
       preferenceItems.push({
         id: product.id.toString(),
         title: product.title,
-        unit_price: parseFloat(product.price),
+        unit_price: priceAsInteger,
         quantity: item.quantity,
       });
     }
-
     // 2. Create the MercadoPago Preference using Checkout v2 API
     const preference = new Preference(client);
     const preferenceResponse = await preference.create({
@@ -39,8 +41,8 @@ const createCheckout = async (req, res) => {
           failure: "http://localhost:3000/failure",
           pending: "http://localhost:3000/pending"
         },
-        auto_return: "approved",
-        notification_url: "http://localhost:5000/api/orders/webhook" // Updated for v2,
+        //auto_return: "approved",
+        notification_url: "http://localhost:5000/api/webhooks/mercadopago" // Updated for v2,
       }
     });
 
