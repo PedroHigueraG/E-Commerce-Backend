@@ -1,14 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { createCheckout, handleWebhook } = require('../controllers/orderController');
+const { createCheckout } = require('../controllers/orderController');
+const verifyToken = require('../middlewares/authMiddleware');
 
 // POST /api/orders/checkout
 // Creates a MercadoPago preference and saves a pending order
-// Note: In a production environment, you would add an authentication middleware here to ensure only logged-in users can check out!
-router.post('/checkout', createCheckout);
-
-// POST /api/orders/webhook
-// This is the public endpoint MercadoPago will send asynchronous notifications to
-router.post('/webhook', handleWebhook);
+router.post('/checkout', verifyToken, createCheckout);
 
 module.exports = router;
