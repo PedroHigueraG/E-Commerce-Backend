@@ -1,6 +1,7 @@
 require('dotenv').config(); // Ensure we can read the .env variables
 const { Sequelize } = require('sequelize');
 
+// TODO: Pasar a config y exportar el objeto db
 // 1. Initialize the Sequelize connection
 const sequelize = new Sequelize(
   process.env.DB_NAME,       // Name of your local database
@@ -34,7 +35,9 @@ db.Order = require('./Order')(sequelize);
 db.OrderItem = require('./OrderItem')(sequelize);
 
 // --- Define Associations ---
-
+// TODO: Pasar las relaciones a los modelos y exportarlas en index.js para mantener el código organizado
+// TODO: Que bloquee el ondelete
+// TODO: Tabla nueva de las compras realizadas y aprobadas
 // 1. User <-> Order (One-to-Many)
 db.User.hasMany(db.Order, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 db.Order.belongsTo(db.User, { foreignKey: 'user_id' });

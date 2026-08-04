@@ -34,6 +34,7 @@ const register = async (req, res) => {
 };
 
 // Login an existing user
+// TODO: Revisar codigos de errores
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -41,13 +42,13 @@ const login = async (req, res) => {
     // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(404).json({ message: 'Invalid credentials' });
     }
 
     // Compare the provided password with the hashed password in the DB
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(403).json({ message: 'Invalid credentials' });
     }
 
     // Generate a secure JSON Web Token

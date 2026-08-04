@@ -1,7 +1,8 @@
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const { Order, OrderItem, Product } = require('../models');
 
-// Initialize the MercadoPago v2 client
+// TODO: Initialize the MercadoPago v2 client
+// TODO: Agregar carrito de compras y sus funciones
 const client = new MercadoPagoConfig({ 
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
 });
@@ -32,6 +33,7 @@ const createCheckout = async (req, res) => {
       });
     }
     // 2. Create the MercadoPago Preference using Checkout v2 API
+    // TODO: Crear variable de entorno para las urls de redireccionamiento
     const preference = new Preference(client);
     const preferenceResponse = await preference.create({
       body: {
@@ -47,6 +49,7 @@ const createCheckout = async (req, res) => {
     });
 
     // 3. Save the Order in your database as 'pending'
+    // TODO: manejo de errores en caso de que no se pueda crear la orden
     const newOrder = await Order.create({
       user_id: userId,
       total_amount: totalAmount,

@@ -14,6 +14,7 @@ app.use(express.json());
 
 // --- Routes ---
 // We will create these route files next
+// TODO: Rutas separadas en un solo archivo para mantener el código organizado -> index en routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
